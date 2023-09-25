@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  backend:
+    container_name: backend_restful_fiap
+    build: .
+    tty: true
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    command: sh -c "npm install --force && npm run start:dev"
+    networks:
+      - fiap_restful
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: fiap
+      POSTGRES_PASSWORD: fiap
+      POSTGRES_DB: fiap
+    ports: 
+      - "5432:5432" 
+    networks:
+      - fiap_restful
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - fiap_restful
+
+networks:
+  fiap_restful:
+    driver: bridge
+
+    
