@@ -41,7 +41,7 @@ export class UserCoursesController {
         }
     })
     update(@Param(':id') id: number, @getUser() user: User, @Body() userCouresDTO: UserCoursesDTO) {
-        return this.update(id, user, userCouresDTO);
+        return this.userCoursesService.update(id, user, userCouresDTO);
     }
 
     @Delete(':id')
