@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { UserDTO } from './dto/user.dto';
 import { UserService } from './services/users.service';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiExcludeController, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UserUpdateDTO } from './dto/user.update.dto';
 
 @ApiTags('Users')
+@ApiExcludeController()
 @Controller('users')
 export class UsersController {
 
@@ -15,8 +16,8 @@ export class UsersController {
     @ApiBody({
         schema: {
             properties: { 
-                'username': { type: 'string' },
-                'password': { type: 'string' }
+                'username': { type: 'string', default: "fiap" },
+                'password': { type: 'string', default: "fiap" }
             }
         }
     })

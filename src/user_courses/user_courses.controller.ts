@@ -1,7 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { UserCoursesDTO } from './dto/user_courses.dto';
 import { UserCoursesService } from './services/user_courses.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { getUser } from 'src/user/user.decorator';
+import { User } from 'src/user/entities/user.entity';
 
 @ApiTags('UserCourses')
 @Controller('user-courses')
@@ -10,27 +13,57 @@ export class UserCoursesController {
     constructor(private userCoursesService: UserCoursesService) {}
 
     @Post()
-    create(@Body() userCoursesDTO: UserCoursesDTO) {
-        return this.userCoursesService.create(userCoursesDTO);
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Cadastrar Curso' })
+    @ApiBody({
+        schema: {
+            properties: { 
+                'title': { type:'string', default: 'Curso de PHP Alura' },
+                'description': { type:'string', default: 'Curso de desenvolvimento com PHP' },
+            }
+        }
+    })
+    create(@Body() userCoursesDTO: UserCoursesDTO, @getUser() user: User) {
+        return this.userCoursesService.create(user, userCoursesDTO);
     }
 
     @Patch(':id')
-    update(@Param(':id') id: number, @Body() userCouresDTO: UserCoursesDTO) {
-        return this.update(id, userCouresDTO);
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Edita Curso' })
+    @ApiBody({
+        schema: {
+            properties: { 
+                'title': { type:'string', default: 'Curso de PHP Alura' },
+                'description': { type:'string', default: 'Curso de desenvolvimento com PHP' },
+            }
+        }
+    })
+    update(@Param(':id') id: number, @getUser() user: User, @Body() userCouresDTO: UserCoursesDTO) {
+        return this.update(id, user, userCouresDTO);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: number) {
-        return this.userCoursesService.remove(id);
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    remove(@Param('id') id: number, @getUser() user: User) {
+        return this.userCoursesService.remove(user, id);
     }
 
     @Get()
-    all() {
-        return this.userCoursesService.findAll()
+    @UseGuards(AuthGuard)
+    @ApiOperation({ summary: 'Lista Cursos' })
+    @ApiBearerAuth('JWT-auth')
+    all(@getUser() user: User) {
+        return this.userCoursesService.findAll(user)
     }
     
     @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.userCoursesService.findeOne(id);
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Busca Curso' })
+    findOne(@Param('id') id: number, @getUser() user: User) {
+        return this.userCoursesService.findeOne(user, id);
     }
 }

@@ -2,32 +2,29 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UserProfile } from "../entities/user_profile.entity";
 import { Repository } from "typeorm";
 import { UserProfileDTO } from "../dto/user_profile.dto";
+import { Injectable, Scope } from "@nestjs/common";
+import { User } from "src/user/entities/user.entity";
 
+@Injectable({ scope: Scope.REQUEST })
 export class UserProfileService {
     constructor(
         @InjectRepository(UserProfile)
-        private userProfileRepository: Repository<UserProfile>
+        private userProfileRepository: Repository<UserProfile>,
     ) {}
 
-    async create(userProfileDTO: UserProfileDTO): Promise<UserProfile> {
-        return await this.userProfileRepository.save(userProfileDTO);
+    async create(user: User, userProfileDTO: UserProfileDTO): Promise<UserProfile> {
+        console.log('USER=ID: ', user.id);
+
+        return await this.userProfileRepository.save({ user_id: user.id, ...userProfileDTO});
     }
 
-    async update(id: number, userProfileDTO: UserProfileDTO): Promise<UserProfile> {
-        await this.userProfileRepository.update({id}, userProfileDTO);
+    async update(user: User, userProfileDTO: UserProfileDTO): Promise<UserProfile> {
+        await this.userProfileRepository.update({user_id: user.id}, userProfileDTO);
 
-        return await this.userProfileRepository.findOne({ where: { id }});
-    } 
-
-    async remove(id: number): Promise<void> {
-        await this.userProfileRepository.delete(id);
+        return await this.userProfileRepository.findOne({ where: { user_id: user.id }});
     }
 
-    async findOne(id: number): Promise<UserProfile> {
-        return await this.userProfileRepository.findOne({ where: { id }});
-    }
-
-    async findAll(): Promise<UserProfile[]> {
-        return await this.userProfileRepository.find()
+    async getProfile(user: User): Promise<UserProfile> {
+        return await this.userProfileRepository.findOne({ where: {user_id: user.id }});
     }
 }

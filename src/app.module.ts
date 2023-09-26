@@ -20,13 +20,14 @@ import { AuthModule } from './auth/auth.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    UserModule,
+    AuthModule,
     UserProfileModule,
     UserCoursesModule,
     UserSkillsModule,
     CompanyModule,
     JobModule,
-    // AuthModule,
+    UserModule,
+    
   ],
   providers: [],
 })

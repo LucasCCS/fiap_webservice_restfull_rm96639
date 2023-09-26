@@ -6,7 +6,7 @@ import { UserProfileService } from './services/user_profile.service';
 
 @Module({
     imports:[
-        TypeOrmModule.forFeature([UserProfile])
+        TypeOrmModule.forFeature([UserProfile]),
     ],
     providers: [UserProfileService],
     controllers: [UserProfileController]

@@ -1,9 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'tbl_job' })
 export class Job {
     @PrimaryGeneratedColumn()
     id: number
+
+    @Column()
+    @PrimaryColumn()
+    company_id: number
 
     @Column()
     title: string
