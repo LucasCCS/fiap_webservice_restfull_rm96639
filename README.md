@@ -14,7 +14,7 @@ Este projeto contempla um MVP contendo:
 ## Como acessar?
 
 Url de Acesso: 
-> webservice-restful-fiap.costacruzsilva.dev.br/api
+> http://webservice-restful-fiap.costacruzsilva.dev.br/api
 
 Esta interface da acesso ao swagger onde será possível verificar todos os endpoints e interagir com os mesmos.
 
